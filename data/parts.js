@@ -1,4 +1,7 @@
 export const parts = [
+  // ======================
+  // HEADER
+  // ======================
   {
     id: "header-simple",
     category: "header",
@@ -6,7 +9,7 @@ export const parts = [
     html: `
       <header class="part-header-simple">
         <h1 class="part-header-simple__logo">MySite</h1>
-        <nav class="part-header-simple__nav">
+        <nav>
           <a href="#">Home</a>
           <a href="#">About</a>
           <a href="#">Contact</a>
@@ -17,20 +20,13 @@ export const parts = [
       .part-header-simple {
         display: flex;
         justify-content: space-between;
-        align-items: center;
         padding: 16px 24px;
         background: #222;
         color: white;
       }
-
-      .part-header-simple__logo {
-        margin: 0;
-        font-size: 24px;
-      }
-
-      .part-header-simple__nav a {
+      .part-header-simple a {
         color: white;
-        margin-left: 16px;
+        margin-left: 12px;
         text-decoration: none;
       }
     `,
@@ -38,14 +34,49 @@ export const parts = [
   },
 
   {
+    id: "header-centered",
+    category: "header",
+    name: "中央ロゴヘッダー",
+    html: `
+      <header class="part-header-centered">
+        <h1>MySite</h1>
+        <nav>
+          <a href="#">Home</a>
+          <a href="#">Works</a>
+          <a href="#">Contact</a>
+        </nav>
+      </header>
+    `,
+    css: `
+      .part-header-centered {
+        text-align: center;
+        padding: 20px;
+        background: #444;
+        color: white;
+      }
+      .part-header-centered nav {
+        margin-top: 10px;
+      }
+      .part-header-centered a {
+        margin: 0 10px;
+        color: white;
+      }
+    `,
+    init: () => {}
+  },
+
+  // ======================
+  // HERO
+  // ======================
+  {
     id: "hero-simple",
     category: "hero",
     name: "シンプルヒーロー",
     html: `
       <section class="part-hero-simple">
-        <h2 class="part-hero-simple__title">シンプルなホームページ</h2>
-        <p class="part-hero-simple__text">これはサンプルです</p>
-        <button class="part-hero-simple__button" id="part-hero-simple-btn">クリック</button>
+        <h2>シンプルなサイト</h2>
+        <p>これはサンプルです</p>
+        <button class="hero-btn">クリック</button>
       </section>
     `,
     css: `
@@ -54,54 +85,56 @@ export const parts = [
         padding: 80px 20px;
         background: #f5f5f5;
       }
-
-      .part-hero-simple__title {
-        margin-bottom: 16px;
-        font-size: 32px;
-      }
-
-      .part-hero-simple__text {
-        margin-bottom: 20px;
-        color: #555;
-      }
-
-      .part-hero-simple__button {
+      .hero-btn {
         padding: 10px 20px;
         cursor: pointer;
-        border: none;
-        border-radius: 6px;
-        background: #222;
-        color: white;
       }
     `,
     init: () => {
-      const heroBtn = document.getElementById("part-hero-simple-btn");
-      if (!heroBtn) return;
+      const btn = document.querySelector(".part-hero-simple .hero-btn");
+      if (!btn) return;
 
-      heroBtn.addEventListener("click", () => {
-        alert("クリックされました！");
+      btn.addEventListener("click", () => {
+        alert("シンプルヒーロー！");
       });
     }
   },
 
+  {
+    id: "hero-image",
+    category: "hero",
+    name: "背景画像ヒーロー",
+    html: `
+      <section class="part-hero-image">
+        <h2>Welcome</h2>
+      </section>
+    `,
+    css: `
+      .part-hero-image {
+        height: 300px;
+        background: linear-gradient(45deg, #0bd, #09f);
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 32px;
+      }
+    `,
+    init: () => {}
+  },
+
+  // ======================
+  // SECTION
+  // ======================
   {
     id: "cards-simple",
     category: "section",
     name: "3カラムカード",
     html: `
       <section class="part-cards-simple">
-        <div class="part-cards-simple__card">
-          <h3>サービス1</h3>
-          <p>説明文です</p>
-        </div>
-        <div class="part-cards-simple__card">
-          <h3>サービス2</h3>
-          <p>説明文です</p>
-        </div>
-        <div class="part-cards-simple__card">
-          <h3>サービス3</h3>
-          <p>説明文です</p>
-        </div>
+        <div class="card">サービス1</div>
+        <div class="card">サービス2</div>
+        <div class="card">サービス3</div>
       </section>
     `,
     css: `
@@ -110,30 +143,49 @@ export const parts = [
         gap: 20px;
         padding: 40px;
       }
-
-      .part-cards-simple__card {
+      .part-cards-simple .card {
         flex: 1;
         padding: 20px;
         background: #eee;
-        border-radius: 8px;
         transition: transform 0.3s;
       }
     `,
     init: () => {
-      const cards = document.querySelectorAll(".part-cards-simple__card");
+      const cards = document.querySelectorAll(".part-cards-simple .card");
 
       cards.forEach(card => {
         card.addEventListener("mouseenter", () => {
-          card.style.transform = "translateY(-10px)";
+          card.style.transform = "scale(1.05)";
         });
-
         card.addEventListener("mouseleave", () => {
-          card.style.transform = "translateY(0)";
+          card.style.transform = "scale(1)";
         });
       });
     }
   },
 
+  {
+    id: "section-text",
+    category: "section",
+    name: "テキストセクション",
+    html: `
+      <section class="part-section-text">
+        <h2>About</h2>
+        <p>ここに説明文が入ります</p>
+      </section>
+    `,
+    css: `
+      .part-section-text {
+        padding: 60px;
+        text-align: center;
+      }
+    `,
+    init: () => {}
+  },
+
+  // ======================
+  // FOOTER
+  // ======================
   {
     id: "footer-simple",
     category: "footer",
@@ -150,9 +202,25 @@ export const parts = [
         background: #222;
         color: white;
       }
+    `,
+    init: () => {}
+  },
 
-      .part-footer-simple p {
-        margin: 0;
+  {
+    id: "footer-dark",
+    category: "footer",
+    name: "濃いフッター",
+    html: `
+      <footer class="part-footer-dark">
+        <p>All Rights Reserved</p>
+      </footer>
+    `,
+    css: `
+      .part-footer-dark {
+        text-align: center;
+        padding: 30px;
+        background: black;
+        color: white;
       }
     `,
     init: () => {}
