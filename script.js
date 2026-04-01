@@ -4,6 +4,13 @@ const partsListEl = document.getElementById("parts-list");
 const selectedListEl = document.getElementById("selected-list");
 const previewEl = document.getElementById("preview");
 
+const CATEGORY_ORDER = {
+  header: 1,
+  hero: 2,
+  section: 3,
+  footer: 4
+};
+
 let selectedPartIds = [
   "header-simple",
   "hero-simple",
@@ -90,7 +97,11 @@ function clearDynamicStyles() {
 }
 
 function renderPreview() {
-  const selectedParts = getSelectedParts();
+  let selectedParts = getSelectedParts();
+
+  selectedParts.sort((a, b) => {
+    return CATEGORY_ORDER[a.category] - CATEGORY_ORDER[b.category];
+  });
 
   previewEl.innerHTML = selectedParts.map(part => part.html).join("\n");
 
