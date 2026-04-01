@@ -10,7 +10,7 @@ body {
 
 .app {
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
 }
 
 .sidebar {
@@ -24,6 +24,12 @@ body {
 .main-content {
   flex: 1;
   padding: 24px;
+  overflow-y: auto;
+}
+
+.preview-wrapper {
+  position: sticky;
+  top: 24px;
 }
 
 .parts-list,
@@ -93,4 +99,25 @@ button {
   padding-bottom: 8px;
   border-bottom: 2px solid #ddd;
   font-size: 20px;
+}
+
+.part-item--selected {
+  border: 2px solid #222;
+  background: #eaeaea;
+}
+
+.selected-btn {
+  background: #888;
+  color: white;
+  cursor: default;
+}
+
+.change-btn {
+  background: #0b6efd;
+  color: white;
+}
+
+.add-btn {
+  background: #222;
+  color: white;
 }

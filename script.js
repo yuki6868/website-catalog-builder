@@ -57,6 +57,7 @@ function addPart(partId) {
 
   selectedPartIds.push(partId);
 
+  renderPartsList();
   renderSelectedList();
   renderPreview();
 }
@@ -95,14 +96,25 @@ function renderPartsList() {
       section.appendChild(heading);
 
       categoryParts.forEach(part => {
+        const buttonState = getButtonState(part);
+
         const item = document.createElement("div");
         item.className = "part-item";
 
+        if (buttonState.label === "選択中") {
+          item.classList.add("part-item--selected");
+        }
+
         item.innerHTML = `
           <h3>${part.name}</h3>
-          <p>カテゴリ: ${part.category}</p>
           <div class="button-row">
-            <button class="add-btn" data-id="${part.id}">追加</button>
+            <button
+              class="${buttonState.className}"
+              data-id="${part.id}"
+              ${buttonState.disabled ? "disabled" : ""}
+            >
+              ${buttonState.label}
+            </button>
           </div>
         `;
 
@@ -112,13 +124,50 @@ function renderPartsList() {
       partsListEl.appendChild(section);
     });
 
-  const addButtons = document.querySelectorAll(".add-btn");
-  addButtons.forEach(button => {
+  const actionButtons = document.querySelectorAll(".add-btn, .change-btn");
+  actionButtons.forEach(button => {
     button.addEventListener("click", () => {
       const partId = button.dataset.id;
       addPart(partId);
+      renderPartsList();
     });
   });
+}
+
+function isPartSelected(partId) {
+  return selectedPartIds.includes(partId);
+}
+
+function getSelectedPartByCategory(category) {
+  return getSelectedParts().find(part => part.category === category) || null;
+}
+
+function getButtonState(part) {
+  const isSelected = isPartSelected(part.id);
+  const isSingleCategory = SINGLE_CATEGORY_RULES[part.category];
+  const selectedPartInCategory = getSelectedPartByCategory(part.category);
+
+  if (isSelected) {
+    return {
+      label: "選択中",
+      className: "selected-btn",
+      disabled: true
+    };
+  }
+
+  if (isSingleCategory && selectedPartInCategory) {
+    return {
+      label: "変更",
+      className: "change-btn",
+      disabled: false
+    };
+  }
+
+  return {
+    label: "追加",
+    className: "add-btn",
+    disabled: false
+  };
 }
 
 function renderSelectedList() {
@@ -150,6 +199,7 @@ function renderSelectedList() {
     button.addEventListener("click", () => {
       const partId = button.dataset.id;
       selectedPartIds = selectedPartIds.filter(id => id !== partId);
+      renderPartsList();
       renderSelectedList();
       renderPreview();
     });
