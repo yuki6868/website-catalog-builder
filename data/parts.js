@@ -34,9 +34,9 @@ export const parts = [
         text-decoration: none;
       }
     `,
-    js: ``
+    init: () => {}
   },
-  
+
   {
     id: "hero-simple",
     category: "hero",
@@ -74,16 +74,14 @@ export const parts = [
         color: white;
       }
     `,
-    js: `
-      (() => {
-        const heroBtn = document.getElementById('part-hero-simple-btn');
-        if (heroBtn) {
-          heroBtn.addEventListener('click', () => {
-            alert('クリックされました！');
-          });
-        }
-      })();
-    `
+    init: () => {
+      const heroBtn = document.getElementById("part-hero-simple-btn");
+      if (!heroBtn) return;
+
+      heroBtn.addEventListener("click", () => {
+        alert("クリックされました！");
+      });
+    }
   },
 
   {
@@ -121,20 +119,19 @@ export const parts = [
         transition: transform 0.3s;
       }
     `,
-    js: `
-      (() => {
-        const cards = document.querySelectorAll('.part-cards-simple__card');
-        cards.forEach(card => {
-          card.addEventListener('mouseenter', () => {
-            card.style.transform = 'translateY(-10px)';
-          });
+    init: () => {
+      const cards = document.querySelectorAll(".part-cards-simple__card");
 
-          card.addEventListener('mouseleave', () => {
-            card.style.transform = 'translateY(0)';
-          });
+      cards.forEach(card => {
+        card.addEventListener("mouseenter", () => {
+          card.style.transform = "translateY(-10px)";
         });
-      })();
-    `
+
+        card.addEventListener("mouseleave", () => {
+          card.style.transform = "translateY(0)";
+        });
+      });
+    }
   },
 
   {
@@ -158,6 +155,6 @@ export const parts = [
         margin: 0;
       }
     `,
-    js: ``
+    init: () => {}
   }
 ];

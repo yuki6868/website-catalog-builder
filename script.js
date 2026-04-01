@@ -82,11 +82,6 @@ function renderSelectedList() {
   });
 }
 
-function clearPartScripts() {
-  const oldScripts = document.querySelectorAll('script[data-part-script="true"]');
-  oldScripts.forEach(script => script.remove());
-}
-
 function clearDynamicStyles() {
   const oldStyle = document.getElementById("dynamic-parts-style");
   if (oldStyle) {
@@ -100,18 +95,15 @@ function renderPreview() {
   previewEl.innerHTML = selectedParts.map(part => part.html).join("\n");
 
   clearDynamicStyles();
+
   const styleTag = document.createElement("style");
   styleTag.id = "dynamic-parts-style";
   styleTag.textContent = selectedParts.map(part => part.css).join("\n");
   document.head.appendChild(styleTag);
 
-  clearPartScripts();
   selectedParts.forEach(part => {
-    if (part.js.trim()) {
-      const scriptTag = document.createElement("script");
-      scriptTag.dataset.partScript = "true";
-      scriptTag.textContent = part.js;
-      document.body.appendChild(scriptTag);
+    if (typeof part.init === "function") {
+      part.init();
     }
   });
 }
