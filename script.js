@@ -11,6 +11,13 @@ const CATEGORY_ORDER = {
   footer: 4
 };
 
+const SINGLE_CATEGORY_RULES = {
+  header: true,
+  hero: true,
+  footer: true,
+  section: false
+};
+
 let selectedPartIds = [
   "header-simple",
   "hero-simple",
@@ -22,6 +29,29 @@ function getSelectedParts() {
   return selectedPartIds
     .map(id => parts.find(part => part.id === id))
     .filter(Boolean);
+}
+
+function addPart(partId) {
+  const newPart = parts.find(part => part.id === partId);
+  if (!newPart) return;
+
+  const isSingleCategory = SINGLE_CATEGORY_RULES[newPart.category];
+
+  if (isSingleCategory) {
+    selectedPartIds = selectedPartIds.filter(id => {
+      const existingPart = parts.find(part => part.id === id);
+      return existingPart && existingPart.category !== newPart.category;
+    });
+  } else {
+    if (selectedPartIds.includes(partId)) {
+      return;
+    }
+  }
+
+  selectedPartIds.push(partId);
+
+  renderSelectedList();
+  renderPreview();
 }
 
 function renderPartsList() {
@@ -46,14 +76,7 @@ function renderPartsList() {
   addButtons.forEach(button => {
     button.addEventListener("click", () => {
       const partId = button.dataset.id;
-
-      if (selectedPartIds.includes(partId)) {
-        return;
-      }
-
-      selectedPartIds.push(partId);
-      renderSelectedList();
-      renderPreview();
+      addPart(partId);
     });
   });
 }
@@ -61,7 +84,11 @@ function renderPartsList() {
 function renderSelectedList() {
   selectedListEl.innerHTML = "";
 
-  const selectedParts = getSelectedParts();
+  let selectedParts = getSelectedParts();
+
+  selectedParts.sort((a, b) => {
+    return CATEGORY_ORDER[a.category] - CATEGORY_ORDER[b.category];
+  });
 
   selectedParts.forEach(part => {
     const item = document.createElement("div");
