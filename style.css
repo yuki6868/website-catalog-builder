@@ -83,3 +83,14 @@ button {
   overflow: hidden;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }
+
+.catalog-group {
+  margin-bottom: 32px;
+}
+
+.catalog-group__title {
+  margin: 0 0 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #ddd;
+  font-size: 20px;
+}

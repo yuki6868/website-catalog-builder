@@ -25,6 +25,13 @@ let selectedPartIds = [
   "footer-simple"
 ];
 
+const CATEGORY_LABELS = {
+  header: "Header",
+  hero: "Hero",
+  section: "Section",
+  footer: "Footer"
+};
+
 function getSelectedParts() {
   return selectedPartIds
     .map(id => parts.find(part => part.id === id))
@@ -54,23 +61,56 @@ function addPart(partId) {
   renderPreview();
 }
 
+function groupPartsByCategory(parts) {
+  const grouped = {};
+
+  parts.forEach(part => {
+    if (!grouped[part.category]) {
+      grouped[part.category] = [];
+    }
+    grouped[part.category].push(part);
+  });
+
+  return grouped;
+}
+
 function renderPartsList() {
   partsListEl.innerHTML = "";
 
-  parts.forEach(part => {
-    const item = document.createElement("div");
-    item.className = "part-item";
+  const groupedParts = groupPartsByCategory(parts);
 
-    item.innerHTML = `
-      <h3>${part.name}</h3>
-      <p>カテゴリ: ${part.category}</p>
-      <div class="button-row">
-        <button class="add-btn" data-id="${part.id}">追加</button>
-      </div>
-    `;
+  Object.keys(CATEGORY_ORDER)
+    .sort((a, b) => CATEGORY_ORDER[a] - CATEGORY_ORDER[b])
+    .forEach(category => {
+      const categoryParts = groupedParts[category];
+      if (!categoryParts || categoryParts.length === 0) return;
 
-    partsListEl.appendChild(item);
-  });
+      const section = document.createElement("section");
+      section.className = "catalog-group";
+
+      const heading = document.createElement("h2");
+      heading.className = "catalog-group__title";
+      heading.textContent = CATEGORY_LABELS[category] || category;
+
+      section.appendChild(heading);
+
+      categoryParts.forEach(part => {
+        const item = document.createElement("div");
+        item.className = "part-item";
+
+        item.innerHTML = `
+          <h3>${part.name}</h3>
+          <p>カテゴリ: ${part.category}</p>
+          <div class="button-row">
+            <button class="add-btn" data-id="${part.id}">追加</button>
+          </div>
+        `;
+
+        section.appendChild(item);
+      });
+
+      partsListEl.appendChild(section);
+    });
 
   const addButtons = document.querySelectorAll(".add-btn");
   addButtons.forEach(button => {
