@@ -18,13 +18,6 @@ const SINGLE_CATEGORY_RULES = {
   section: false
 };
 
-let selectedPartIds = [
-  "header-simple",
-  "hero-simple",
-  "cards-simple",
-  "footer-simple"
-];
-
 const CATEGORY_LABELS = {
   header: "Header",
   hero: "Hero",
@@ -32,106 +25,17 @@ const CATEGORY_LABELS = {
   footer: "Footer"
 };
 
+let selectedPartIds = [
+  "header-simple",
+  "hero-simple",
+  "cards-simple",
+  "footer-simple"
+];
+
 function getSelectedParts() {
   return selectedPartIds
     .map(id => parts.find(part => part.id === id))
     .filter(Boolean);
-}
-
-function addPart(partId) {
-  const newPart = parts.find(part => part.id === partId);
-  if (!newPart) return;
-
-  const isSingleCategory = SINGLE_CATEGORY_RULES[newPart.category];
-
-  if (isSingleCategory) {
-    selectedPartIds = selectedPartIds.filter(id => {
-      const existingPart = parts.find(part => part.id === id);
-      return existingPart && existingPart.category !== newPart.category;
-    });
-  } else {
-    if (selectedPartIds.includes(partId)) {
-      return;
-    }
-  }
-
-  selectedPartIds.push(partId);
-
-  renderPartsList();
-  renderSelectedList();
-  renderPreview();
-}
-
-function groupPartsByCategory(parts) {
-  const grouped = {};
-
-  parts.forEach(part => {
-    if (!grouped[part.category]) {
-      grouped[part.category] = [];
-    }
-    grouped[part.category].push(part);
-  });
-
-  return grouped;
-}
-
-function renderPartsList() {
-  partsListEl.innerHTML = "";
-
-  const groupedParts = groupPartsByCategory(parts);
-
-  Object.keys(CATEGORY_ORDER)
-    .sort((a, b) => CATEGORY_ORDER[a] - CATEGORY_ORDER[b])
-    .forEach(category => {
-      const categoryParts = groupedParts[category];
-      if (!categoryParts || categoryParts.length === 0) return;
-
-      const section = document.createElement("section");
-      section.className = "catalog-group";
-
-      const heading = document.createElement("h2");
-      heading.className = "catalog-group__title";
-      heading.textContent = CATEGORY_LABELS[category] || category;
-
-      section.appendChild(heading);
-
-      categoryParts.forEach(part => {
-        const buttonState = getButtonState(part);
-
-        const item = document.createElement("div");
-        item.className = "part-item";
-
-        if (buttonState.label === "選択中") {
-          item.classList.add("part-item--selected");
-        }
-
-        item.innerHTML = `
-          <h3>${part.name}</h3>
-          <div class="button-row">
-            <button
-              class="${buttonState.className}"
-              data-id="${part.id}"
-              ${buttonState.disabled ? "disabled" : ""}
-            >
-              ${buttonState.label}
-            </button>
-          </div>
-        `;
-
-        section.appendChild(item);
-      });
-
-      partsListEl.appendChild(section);
-    });
-
-  const actionButtons = document.querySelectorAll(".add-btn, .change-btn");
-  actionButtons.forEach(button => {
-    button.addEventListener("click", () => {
-      const partId = button.dataset.id;
-      addPart(partId);
-      renderPartsList();
-    });
-  });
 }
 
 function isPartSelected(partId) {
@@ -168,6 +72,122 @@ function getButtonState(part) {
     className: "add-btn",
     disabled: false
   };
+}
+
+function addPart(partId) {
+  const newPart = parts.find(part => part.id === partId);
+  if (!newPart) return;
+
+  const isSingleCategory = SINGLE_CATEGORY_RULES[newPart.category];
+
+  if (isSingleCategory) {
+    selectedPartIds = selectedPartIds.filter(id => {
+      const existingPart = parts.find(part => part.id === id);
+      return existingPart && existingPart.category !== newPart.category;
+    });
+  } else {
+    if (selectedPartIds.includes(partId)) {
+      return;
+    }
+  }
+
+  selectedPartIds.push(partId);
+
+  renderPartsList();
+  renderSelectedList();
+  renderPreview();
+}
+
+function groupPartsByCategory(partsList) {
+  const grouped = {};
+
+  partsList.forEach(part => {
+    if (!grouped[part.category]) {
+      grouped[part.category] = [];
+    }
+    grouped[part.category].push(part);
+  });
+
+  return grouped;
+}
+
+function buildThumbnailHTML(part) {
+  if (part.thumbnailImage) {
+    return `
+      <div class="part-thumbnail">
+        <img src="${part.thumbnailImage}" alt="${part.name}">
+      </div>
+    `;
+  }
+
+  return `
+    <div class="part-thumbnail ${part.thumbnailClass || ""}">
+      <span class="part-thumbnail__label">
+        ${part.thumbnailLabel || part.name}
+      </span>
+    </div>
+  `;
+}
+
+function renderPartsList() {
+  partsListEl.innerHTML = "";
+
+  const groupedParts = groupPartsByCategory(parts);
+
+  Object.keys(CATEGORY_ORDER)
+    .sort((a, b) => CATEGORY_ORDER[a] - CATEGORY_ORDER[b])
+    .forEach(category => {
+      const categoryParts = groupedParts[category];
+      if (!categoryParts || categoryParts.length === 0) return;
+
+      const section = document.createElement("section");
+      section.className = "catalog-group";
+
+      const heading = document.createElement("h2");
+      heading.className = "catalog-group__title";
+      heading.textContent = CATEGORY_LABELS[category] || category;
+
+      section.appendChild(heading);
+
+      categoryParts.forEach(part => {
+        const buttonState = getButtonState(part);
+
+        const item = document.createElement("div");
+        item.className = "part-item";
+
+        if (buttonState.label === "選択中") {
+          item.classList.add("part-item--selected");
+        }
+
+        const thumbnailHTML = buildThumbnailHTML(part);
+
+        item.innerHTML = `
+          ${thumbnailHTML}
+          <h3>${part.name}</h3>
+          <div class="button-row">
+            <button
+              class="${buttonState.className}"
+              data-id="${part.id}"
+              ${buttonState.disabled ? "disabled" : ""}
+            >
+              ${buttonState.label}
+            </button>
+          </div>
+        `;
+
+        section.appendChild(item);
+      });
+
+      partsListEl.appendChild(section);
+    });
+
+  const actionButtons = document.querySelectorAll(".add-btn, .change-btn");
+  actionButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      const partId = button.dataset.id;
+      addPart(partId);
+    });
+  });
 }
 
 function renderSelectedList() {

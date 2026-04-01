@@ -6,6 +6,9 @@ export const parts = [
     id: "header-simple",
     category: "header",
     name: "シンプルヘッダー",
+    thumbnailClass: "thumb-header-simple",
+    thumbnailLabel: "Header A",
+    thumbnailImage: "./images/header-simple.png",
     html: `
       <header class="part-header-simple">
         <h1 class="part-header-simple__logo">MySite</h1>
@@ -37,6 +40,9 @@ export const parts = [
     id: "header-centered",
     category: "header",
     name: "中央ロゴヘッダー",
+    thumbnailClass: "thumb-header-centered",
+    thumbnailLabel: "Header B",
+    thumbnailImage: "./images/header-centered.png",
     html: `
       <header class="part-header-centered">
         <h1>MySite</h1>
@@ -72,6 +78,9 @@ export const parts = [
     id: "hero-simple",
     category: "hero",
     name: "シンプルヒーロー",
+    thumbnailClass: "thumb-hero-simple",
+    thumbnailLabel: "Hero A",
+    thumbnailImage: "./images/hero-simple.png",
     html: `
       <section class="part-hero-simple">
         <h2>シンプルなサイト</h2>
@@ -104,6 +113,9 @@ export const parts = [
     id: "hero-image",
     category: "hero",
     name: "背景画像ヒーロー",
+    thumbnailClass: "thumb-hero-image",
+    thumbnailLabel: "Hero B",
+    thumbnailImage: "./images/hero-image.png",
     html: `
       <section class="part-hero-image">
         <h2>Welcome</h2>
@@ -130,6 +142,9 @@ export const parts = [
     id: "cards-simple",
     category: "section",
     name: "3カラムカード",
+    thumbnailClass: "thumb-cards-simple",
+    thumbnailLabel: "Section A",
+    thumbnailImage: "./images/cards-simple.png",
     html: `
       <section class="part-cards-simple">
         <div class="card">サービス1</div>
@@ -168,6 +183,9 @@ export const parts = [
     id: "section-text",
     category: "section",
     name: "テキストセクション",
+    thumbnailClass: "thumb-section-text",
+    thumbnailLabel: "Section B",
+    thumbnailImage: "./images/section-text.png",
     html: `
       <section class="part-section-text">
         <h2>About</h2>
@@ -190,6 +208,9 @@ export const parts = [
     id: "footer-simple",
     category: "footer",
     name: "シンプルフッター",
+    thumbnailClass: "thumb-footer-simple",
+    thumbnailLabel: "Footer A",
+    thumbnailImage: "./images/footer-simple.png",
     html: `
       <footer class="part-footer-simple">
         <p>© 2026 MySite</p>
@@ -210,6 +231,9 @@ export const parts = [
     id: "footer-dark",
     category: "footer",
     name: "濃いフッター",
+    thumbnailClass: "thumb-footer-dark",
+    thumbnailLabel: "Footer B",
+    thumbnailImage: "./images/footer-dark.png",
     html: `
       <footer class="part-footer-dark">
         <p>All Rights Reserved</p>
